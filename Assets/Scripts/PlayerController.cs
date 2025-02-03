@@ -8,7 +8,8 @@ public class PlayerController : MonoBehaviour
 
     float horiz, vert;
 
-    bool isGrounded, delayFix;
+    public bool isGrounded;
+    bool delayFix;
 
     public LayerMask groundLayer;
 
@@ -16,12 +17,14 @@ public class PlayerController : MonoBehaviour
 
     Rigidbody rb;
     Animator anim;
+    Throwing throwScript;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         rb = GetComponent<Rigidbody>();
         anim = GetComponent<Animator>();
+        throwScript = GetComponent<Throwing>();
 
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
@@ -38,25 +41,28 @@ public class PlayerController : MonoBehaviour
 
     void Movement()
     {
-        horiz = Input.GetAxisRaw("Horizontal");
-        vert = Input.GetAxisRaw("Vertical");
-        dir = new Vector3(horiz, 0, vert).normalized;
-
-        if (dir.magnitude >= 0.1f)
+        if (!throwScript.throwing)
         {
-            float targetAngle = Mathf.Atan2(dir.x, dir.z) * Mathf.Rad2Deg + Camera.main.transform.eulerAngles.y;
-            float angle = Mathf.SmoothDampAngle(transform.eulerAngles.y, targetAngle, ref smoothVel, turnSpeed);
+            horiz = Input.GetAxisRaw("Horizontal");
+            vert = Input.GetAxisRaw("Vertical");
+            dir = new Vector3(horiz, 0, vert).normalized;
 
-            transform.rotation = Quaternion.Euler(0, angle, 0);
+            if (dir.magnitude >= 0.1f)
+            {
+                float targetAngle = Mathf.Atan2(dir.x, dir.z) * Mathf.Rad2Deg + Camera.main.transform.eulerAngles.y;
+                float angle = Mathf.SmoothDampAngle(transform.eulerAngles.y, targetAngle, ref smoothVel, turnSpeed);
 
-            movedir = Quaternion.Euler(0f, targetAngle, 0f) * Vector3.forward;
-            rb.linearVelocity = new Vector3(movedir.normalized.x * speed, rb.linearVelocity.y, movedir.normalized.z * speed);
-        }
+                transform.rotation = Quaternion.Euler(0, angle, 0);
+
+                movedir = Quaternion.Euler(0f, targetAngle, 0f) * Vector3.forward;
+                rb.linearVelocity = new Vector3(movedir.normalized.x * speed, rb.linearVelocity.y, movedir.normalized.z * speed);
+            }
+        }   
     }
 
     IEnumerator Jump()
     {
-        if (Input.GetKeyDown(KeyCode.Space) && isGrounded && !delayFix)
+        if (Input.GetKeyDown(KeyCode.Space) && isGrounded && !delayFix && !throwScript.isAiming)
         {
             anim.SetTrigger("Jump");
             delayFix = true;
@@ -104,6 +110,7 @@ public class PlayerController : MonoBehaviour
         else
         {
             Debug.DrawRay(transform.position, Vector3.down * rayDistance, Color.white);
+
             isGrounded = false;
         }
     }
