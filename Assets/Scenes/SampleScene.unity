@@ -1071,6 +1071,7 @@ GameObject:
   - component: {fileID: 5866666021934034240}
   - component: {fileID: 5866666021934034241}
   - component: {fileID: 5866666021934034242}
+  - component: {fileID: 5866666021934034243}
   m_Layer: 3
   m_Name: Big Robot
   m_TagString: Player
@@ -2680,6 +2681,20 @@ MonoBehaviour:
   groundLayer:
     serializedVersion: 2
     m_Bits: 64
+--- !u!114 &5866666021934034243
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 919132149137206783}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: edac95f3aaa20aa4b9ad5cb5b7086ce4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isAiming: 0
+  upperBody: {fileID: 9019515343429516457}
 --- !u!4 &5901452235220690374
 Transform:
   m_ObjectHideFlags: 0

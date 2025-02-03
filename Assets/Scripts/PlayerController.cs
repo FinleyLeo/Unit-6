@@ -6,6 +6,8 @@ public class PlayerController : MonoBehaviour
     public float speed = 6f, jumpHeight = 5f, throwForce, rayDistance = 0.5f;
     float smoothVel, turnSpeed = 0.1f;
 
+    float horiz, vert;
+
     bool isGrounded, delayFix;
 
     public LayerMask groundLayer;
@@ -36,8 +38,8 @@ public class PlayerController : MonoBehaviour
 
     void Movement()
     {
-        float horiz = Input.GetAxisRaw("Horizontal");
-        float vert = Input.GetAxisRaw("Vertical");
+        horiz = Input.GetAxisRaw("Horizontal");
+        vert = Input.GetAxisRaw("Vertical");
         dir = new Vector3(horiz, 0, vert).normalized;
 
         if (dir.magnitude >= 0.1f)
@@ -81,13 +83,13 @@ public class PlayerController : MonoBehaviour
         anim.SetFloat("Speed", Mathf.Abs(dir.magnitude));
         anim.SetFloat("YVel", rb.linearVelocity.y);
         anim.SetBool("Grounded", isGrounded);
+        anim.SetFloat("AimDirX", horiz);
+        anim.SetFloat("AimDirZ", vert);
     }
 
     void GroundCheck()
     {
-        RaycastHit hit;
-
-        if (Physics.Raycast(transform.position, Vector3.down, out hit, rayDistance, groundLayer))
+        if (Physics.Raycast(transform.position, Vector3.down, rayDistance, groundLayer))
         {
             Debug.DrawRay(transform.position, Vector3.down * rayDistance, Color.green);
 
