@@ -39,10 +39,7 @@ public class Throwing : MonoBehaviour
 
         else
         {
-            cam.GetComponent<CinemachineRotationComposer>().TargetOffset = new Vector3(0, 2.5f, 0f);
-            cam.GetComponent<CinemachineOrbitalFollow>().TargetOffset = new Vector3(0f, 0f, 0f);
-
-            cam.GetComponent<CinemachineOrbitalFollow>().Orbits.Center.Radius = 6;
+            cam.GetComponent<CinemachineCamera>().Lens.FieldOfView = Mathf.Lerp(cam.GetComponent<CinemachineCamera>().Lens.FieldOfView, 60, 4f * Time.deltaTime);
         }
     }
 
@@ -58,6 +55,9 @@ public class Throwing : MonoBehaviour
         {
             isAiming = false;
             StartCoroutine(AnimateWeightsTo(1, 0, 1, 4));
+
+            cam.GetComponent<CinemachineRotationComposer>().TargetOffset = new Vector3(0, 2.5f, 0f);
+            cam.GetComponent<CinemachineOrbitalFollow>().TargetOffset = new Vector3(0f, 0f, 0f);
         }
     }
 
@@ -68,7 +68,7 @@ public class Throwing : MonoBehaviour
             cam.GetComponent<CinemachineRotationComposer>().TargetOffset = new Vector3(1f, 2.75f, 0f);
             cam.GetComponent<CinemachineOrbitalFollow>().TargetOffset = new Vector3(1f, 0.5f, 0f);
 
-            cam.GetComponent<CinemachineOrbitalFollow>().Orbits.Center.Radius = 4;
+            cam.GetComponent<CinemachineCamera>().Lens.FieldOfView = Mathf.Lerp(cam.GetComponent<CinemachineCamera>().Lens.FieldOfView, 40, 4f * Time.deltaTime);
 
             transform.rotation = Quaternion.Euler(0, Camera.main.transform.rotation.eulerAngles.y, 0);
 
@@ -78,7 +78,7 @@ public class Throwing : MonoBehaviour
     public IEnumerator throwGrace()
     {
         throwing = true;
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(1f);
         throwing = false;
         isAiming = false;
     }

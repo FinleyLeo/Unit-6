@@ -3,13 +3,12 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    public float speed = 6f, jumpHeight = 5f, throwForce, rayDistance = 0.5f;
+    public float speed = 6f, jumpHeight = 5f, rayDistance = 0.5f;
     float smoothVel, turnSpeed = 0.1f;
 
     float horiz, vert;
 
-    public bool isGrounded;
-    bool delayFix;
+    public bool isGrounded, delayFix, holdingSmall;
 
     public LayerMask groundLayer;
 
@@ -41,39 +40,54 @@ public class PlayerController : MonoBehaviour
 
     void Movement()
     {
-        if (!throwScript.throwing)
+        horiz = Input.GetAxisRaw("Horizontal");
+        vert = Input.GetAxisRaw("Vertical");
+        dir = new Vector3(horiz, 0, vert).normalized;
+
+        if (dir.magnitude >= 0.1f)
         {
-            horiz = Input.GetAxisRaw("Horizontal");
-            vert = Input.GetAxisRaw("Vertical");
-            dir = new Vector3(horiz, 0, vert).normalized;
+            float targetAngle = Mathf.Atan2(dir.x, dir.z) * Mathf.Rad2Deg + Camera.main.transform.eulerAngles.y;
+            float angle = Mathf.SmoothDampAngle(transform.eulerAngles.y, targetAngle, ref smoothVel, turnSpeed);
 
-            if (dir.magnitude >= 0.1f)
-            {
-                float targetAngle = Mathf.Atan2(dir.x, dir.z) * Mathf.Rad2Deg + Camera.main.transform.eulerAngles.y;
-                float angle = Mathf.SmoothDampAngle(transform.eulerAngles.y, targetAngle, ref smoothVel, turnSpeed);
+            transform.rotation = Quaternion.Euler(0, angle, 0);
 
-                transform.rotation = Quaternion.Euler(0, angle, 0);
-
-                movedir = Quaternion.Euler(0f, targetAngle, 0f) * Vector3.forward;
-                rb.linearVelocity = new Vector3(movedir.normalized.x * speed, rb.linearVelocity.y, movedir.normalized.z * speed);
-            }
-        }   
+            movedir = Quaternion.Euler(0f, targetAngle, 0f) * Vector3.forward;
+            rb.linearVelocity = new Vector3(movedir.normalized.x * speed, rb.linearVelocity.y, movedir.normalized.z * speed);
+        }
     }
 
     IEnumerator Jump()
     {
-        if (Input.GetKeyDown(KeyCode.Space) && isGrounded && !delayFix && !throwScript.isAiming)
+        if (Input.GetKeyDown(KeyCode.Space) && isGrounded && !delayFix)
         {
-            anim.SetTrigger("Jump");
-            delayFix = true;
+            if (gameObject.CompareTag("Big") && !throwScript.isAiming)
+            {
+                anim.SetTrigger("Jump");
+                delayFix = true;
 
-            StartCoroutine(SpeedDelay(4));
+                StartCoroutine(SpeedDelay(4));
 
-            yield return new WaitForSeconds(0.35f);
+                yield return new WaitForSeconds(0.35f);
 
-            delayFix = false;
+                delayFix = false;
 
-            rb.AddForce(Vector3.up * jumpHeight, ForceMode.Impulse);
+                rb.AddForce(Vector3.up * jumpHeight, ForceMode.Impulse);
+            }
+
+            else
+            {
+                anim.SetTrigger("Jump");
+                delayFix = true;
+
+                StartCoroutine(SpeedDelay(4));
+
+                yield return new WaitForSeconds(0.35f);
+
+                delayFix = false;
+
+                rb.AddForce(Vector3.up * jumpHeight, ForceMode.Impulse);
+            }
+            
         }
     }
 
