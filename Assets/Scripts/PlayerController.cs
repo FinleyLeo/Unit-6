@@ -3,20 +3,21 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    public float speed = 6f, jumpHeight = 5f, rayDistance = 0.5f;
-    float smoothVel, turnSpeed = 0.1f;
+    public float speed = 6f, jumpHeight = 5f, rayDistance = 0.5f, horiz, vert;
 
-    float horiz, vert;
+    float smoothVel, turnSpeed = 0.1f;
 
     public bool isGrounded, delayFix, holdingSmall;
 
     public LayerMask groundLayer;
 
-    Vector3 dir, movedir;
+    public Vector3 dir, movedir;
 
     Rigidbody rb;
     Animator anim;
     Throwing throwScript;
+
+    public SwitchCharacter switcher;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -35,18 +36,17 @@ public class PlayerController : MonoBehaviour
         Movement();
         StartCoroutine(Jump());
         GroundCheck();
-        Animations();
     }
 
     void Movement()
     {
-        horiz = Input.GetAxisRaw("Horizontal");
-        vert = Input.GetAxisRaw("Vertical");
-        dir = new Vector3(horiz, 0, vert).normalized;
-
-        if (dir.magnitude >= 0.1f)
+        if (gameObject.CompareTag("Big") && !switcher.smallSelected)
         {
-            if (gameObject.CompareTag("Big"))
+            horiz = Input.GetAxisRaw("Horizontal");
+            vert = Input.GetAxisRaw("Vertical");
+            dir = new Vector3(horiz, 0, vert).normalized;
+
+            if (dir.magnitude >= 0.1f)
             {
                 if (!throwScript.throwing)
                 {
@@ -59,8 +59,15 @@ public class PlayerController : MonoBehaviour
                     rb.linearVelocity = new Vector3(movedir.normalized.x * speed, rb.linearVelocity.y, movedir.normalized.z * speed);
                 }
             }
+        }
 
-            else
+        else if (gameObject.CompareTag("Small") && switcher.smallSelected)
+        {
+            horiz = Input.GetAxisRaw("Horizontal");
+            vert = Input.GetAxisRaw("Vertical");
+            dir = new Vector3(horiz, 0, vert).normalized;
+
+            if (dir.magnitude >= 0.1f)
             {
                 float targetAngle = Mathf.Atan2(dir.x, dir.z) * Mathf.Rad2Deg + Camera.main.transform.eulerAngles.y;
                 float angle = Mathf.SmoothDampAngle(transform.eulerAngles.y, targetAngle, ref smoothVel, turnSpeed);
@@ -77,7 +84,7 @@ public class PlayerController : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Space) && isGrounded && !delayFix)
         {
-            if (gameObject.CompareTag("Big"))
+            if (gameObject.CompareTag("Big") && !switcher.smallSelected)
             {
                 if (!throwScript.isAiming)
                 {
@@ -94,7 +101,7 @@ public class PlayerController : MonoBehaviour
                 }
             }
 
-            else
+            else if (gameObject.CompareTag("Small") && switcher.smallSelected)
             {
                 anim.SetTrigger("Jump");
                 delayFix = true;
@@ -118,24 +125,13 @@ public class PlayerController : MonoBehaviour
         speed *= multi;
     }
 
-    void Animations()
-    {
-        anim.SetFloat("Speed", Mathf.Abs(dir.magnitude));
-        anim.SetFloat("YVel", rb.linearVelocity.y);
-        anim.SetBool("Grounded", isGrounded);
-
-        if (gameObject.CompareTag("Big"))
-        {
-            anim.SetFloat("AimDirX", horiz);
-            anim.SetFloat("AimDirZ", vert);
-        }
-    }
+    
 
     void GroundCheck()
     {
         if (Physics.Raycast(transform.position, Vector3.down, rayDistance, groundLayer))
         {
-            Debug.DrawRay(transform.position, Vector3.down * rayDistance, Color.green);
+            Debug.DrawRay(transform.position, Vector3.down  * rayDistance, Color.green);
 
             if (!isGrounded)
             {

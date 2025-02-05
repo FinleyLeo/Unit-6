@@ -8,23 +8,43 @@ public class Throwing : MonoBehaviour
 
     bool canPickup;
 
+    public float throwForce = 5f;
+
     Animator anim;
     PlayerController playerScript;
-    
-    public GameObject cam, crosshair, small, sitPoint, handPos;
+    SwitchCharacter switcher;
+
+    public GameObject cam, crosshair, pickupText;
+    public GameObject small, sitPoint, handPos;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         anim = GetComponent<Animator>();
         playerScript = GetComponent<PlayerController>();
+        switcher = GameObject.Find("Switcher").GetComponent<SwitchCharacter>();
     }
 
     // Update is called once per frame
     void Update()
     {
         AnimationLogic();
+        ThrowLogic();
+    }
 
+    void Throw()
+    {
+        small.GetComponent<Outline>().enabled = false;
+        small.GetComponent<Rigidbody>().useGravity = true;
+
+        small.GetComponent<Rigidbody>().AddForce(Camera.main.transform.rotation.eulerAngles.normalized * throwForce, ForceMode.Impulse);
+        
+        small.transform.parent = null;
+        small.transform.rotation = Quaternion.Euler(0, 0, 0);
+    }
+
+    void ThrowLogic()
+    {
         if (isAiming)
         {
             CameraAim();
@@ -46,13 +66,20 @@ public class Throwing : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.F) && canPickup)
         {
             small.transform.parent = sitPoint.transform;
-            small.transform.SetPositionAndRotation(sitPoint.transform.position, sitPoint.transform.rotation);
 
             small.GetComponent<Outline>().enabled = false;
             small.GetComponent<Rigidbody>().useGravity = false;
             small.GetComponent<Animator>().SetTrigger("Pick Up");
+            small.GetComponent<Animator>().SetBool("Grounded", false);
+
+            pickupText.GetComponent<Animator>().SetBool("active", false);
 
             playerScript.holdingSmall = true;
+        }
+
+        if (small.transform.parent != null && small.transform.parent.name == "SitPoint")
+        {
+            small.transform.SetPositionAndRotation(sitPoint.transform.position, sitPoint.transform.rotation);
         }
     }
 
@@ -71,7 +98,7 @@ public class Throwing : MonoBehaviour
             StartCoroutine(AnimateWeightsTo(0, 1, 1, 4));
         }
 
-        else if (Input.GetMouseButtonUp(1) && !throwing || !playerScript.isGrounded)
+        else if (Input.GetMouseButtonUp(1) && playerScript.holdingSmall && !throwing)
         {
             isAiming = false;
             playerScript.speed = 4;
@@ -104,6 +131,8 @@ public class Throwing : MonoBehaviour
         yield return new WaitForSeconds(1f);
         StartCoroutine(AnimateWeightsTo(1, 0, 1, 2));
         crosshair.SetActive(false);
+
+        playerScript.speed = 4;
         playerScript.holdingSmall = false;
         throwing = false;
         isAiming = false;
@@ -125,12 +154,23 @@ public class Throwing : MonoBehaviour
         anim.SetLayerWeight(oldLayerIndex, 0f);
     }
 
-    private void OnTriggerEnter(Collider other)
+    private void OnTriggerStay(Collider other)
     {
-        if (other.gameObject.CompareTag("Small"))
+        if (other.gameObject.CompareTag("Small") && !switcher.smallSelected && !playerScript.holdingSmall)
         {
             other.gameObject.GetComponentInParent<Outline>().enabled = true;
             canPickup = true;
+
+            pickupText.SetActive(true);
+            pickupText.GetComponent<Animator>().SetBool("active", true);
+        }
+
+        else if (other.gameObject.CompareTag("Small"))
+        {
+            other.gameObject.GetComponentInParent<Outline>().enabled = false;
+            canPickup = false;
+
+            pickupText.GetComponent<Animator>().SetBool("active", false);
         }
     }
 
@@ -140,6 +180,8 @@ public class Throwing : MonoBehaviour
         {
             other.gameObject.GetComponentInParent<Outline>().enabled = false;
             canPickup = false;
+
+            pickupText.GetComponent<Animator>().SetBool("active", false);
         }
     }
 }

@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class SwitchCharacter : MonoBehaviour
 {
-    bool smallSelected;
+    public bool smallSelected;
 
     public GameObject big, small, cam;
 
@@ -36,29 +36,18 @@ public class SwitchCharacter : MonoBehaviour
             {
                 bigAnim.SetFloat("Speed", 0);
 
-                big.GetComponent<Throwing>().enabled = false;
-
                 cineCam.Follow = small.transform;
                 cineCam.Lens.FieldOfView = 60;
                 camRotation.TargetOffset = new Vector3(0, 1, 0);
-
-                bigScript.enabled = false;
-                smallScript.enabled = true;
-
             }
 
             else if (!smallSelected && smallScript.isGrounded && !smallScript.delayFix)
             {
                 smallAnim.SetFloat("Speed", 0);
 
-                big.GetComponent<Throwing>().enabled = true;
-
                 cineCam.Follow = big.transform;
                 cineCam.Lens.FieldOfView = 60;
                 camRotation.TargetOffset = new Vector3(0, 2.5f, 0);
-
-                bigScript.enabled = true;
-                smallScript.enabled = false;
             }
         }
     }
