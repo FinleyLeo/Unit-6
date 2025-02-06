@@ -37,10 +37,10 @@ public class Throwing : MonoBehaviour
         small.GetComponent<Outline>().enabled = false;
         small.GetComponent<Rigidbody>().useGravity = true;
 
-        small.GetComponent<Rigidbody>().AddForce(Camera.main.transform.rotation.eulerAngles.normalized * throwForce, ForceMode.Impulse);
+        small.GetComponent<Rigidbody>().AddForce(Camera.main.transform.forward * throwForce, ForceMode.Impulse);
         
         small.transform.parent = null;
-        small.transform.rotation = Quaternion.Euler(0, 0, 0);
+        small.transform.rotation = Quaternion.Euler(0, transform.rotation.eulerAngles.y, 0);
     }
 
     void ThrowLogic()
