@@ -1795,7 +1795,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 4
-  jumpHeight: 30
+  jumpHeight: 35
   rayDistance: 0.05
   horiz: 0
   vert: 0

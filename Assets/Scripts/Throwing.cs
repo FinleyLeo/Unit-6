@@ -77,9 +77,14 @@ public class Throwing : MonoBehaviour
             playerScript.holdingSmall = true;
         }
 
-        if (small.transform.parent != null && small.transform.parent.name == "SitPoint")
+        if (small.transform.parent != null && small.transform.parent.name == "SitPoint" && !isAiming)
         {
             small.transform.SetPositionAndRotation(sitPoint.transform.position, sitPoint.transform.rotation);
+        }
+
+        else if (small.transform.parent != null && isAiming)
+        {
+            small.transform.SetPositionAndRotation(handPos.transform.position, handPos.transform.rotation);
         }
     }
 
@@ -92,7 +97,7 @@ public class Throwing : MonoBehaviour
 
             small.GetComponent<Animator>().SetTrigger("Thrown");
             small.transform.parent = handPos.transform;
-            small.transform.SetPositionAndRotation(handPos.transform.position, handPos.transform.rotation);
+            
 
             crosshair.SetActive(true);
             StartCoroutine(AnimateWeightsTo(0, 1, 1, 4));

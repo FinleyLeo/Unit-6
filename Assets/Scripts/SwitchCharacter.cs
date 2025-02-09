@@ -34,20 +34,20 @@ public class SwitchCharacter : MonoBehaviour
 
             if (smallSelected && bigScript.isGrounded && !bigScript.delayFix && !bigScript.holdingSmall)
             {
-                bigAnim.SetFloat("Speed", 0);
-
                 cineCam.Follow = small.transform;
                 cineCam.Lens.FieldOfView = 60;
                 camRotation.TargetOffset = new Vector3(0, 1, 0);
+
+                bigAnim.SetFloat("Speed", 0);
             }
 
             else if (!smallSelected && smallScript.isGrounded && !smallScript.delayFix)
             {
-                smallAnim.SetFloat("Speed", 0);
-
                 cineCam.Follow = big.transform;
                 cineCam.Lens.FieldOfView = 60;
                 camRotation.TargetOffset = new Vector3(0, 2.5f, 0);
+
+                smallAnim.SetFloat("Speed", 0);
             }
         }
     }
