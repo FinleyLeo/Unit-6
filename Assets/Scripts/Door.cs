@@ -21,7 +21,15 @@ public class Door : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.E) && amount == 2)
         {
-            StartCoroutine(Transition("Main Menu", Color.black));
+            if (SceneManager.GetActiveScene().buildIndex + 1 != 3)
+            {
+               StartCoroutine(Transition(SceneManager.GetActiveScene().buildIndex + 1, Color.black));
+            }
+
+            else
+            {
+                StartCoroutine(Transition(0, Color.black));
+            }
         }
     }
 
@@ -51,7 +59,7 @@ public class Door : MonoBehaviour
         }
     }
 
-    IEnumerator Transition(string sceneName, Color color)
+    IEnumerator Transition(int sceneName, Color color)
     {
         transition.GetComponent<Image>().color = color;
         transition.GetComponent<Animator>().SetTrigger("Fade");

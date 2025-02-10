@@ -1796,7 +1796,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 4
   jumpHeight: 45
-  rayDistance: 0.05
+  rayDistance: 0.3
   horiz: 0
   vert: 0
   isGrounded: 1
@@ -1807,6 +1807,7 @@ MonoBehaviour:
     m_Bits: 64
   dir: {x: 0, y: 0, z: 0}
   movedir: {x: 0, y: 0, z: 0}
+  transition: {fileID: 0}
   switcher: {fileID: 0}
 --- !u!114 &6465024732009661589
 MonoBehaviour:
@@ -1822,7 +1823,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isAiming: 0
   throwing: 0
-  throwForce: 15
+  throwForce: 20
   cam: {fileID: 0}
   crosshair: {fileID: 0}
   pickupText: {fileID: 0}

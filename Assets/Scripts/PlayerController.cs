@@ -30,8 +30,17 @@ public class PlayerController : MonoBehaviour
         anim = GetComponent<Animator>();
         throwScript = GetComponent<Throwing>();
 
-        Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = false;
+        if (SceneManager.GetActiveScene().name != "Main Menu")
+        {
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
+        }
+
+        else
+        {
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
+        }
     }
 
     // Update is called once per frame
@@ -44,7 +53,7 @@ public class PlayerController : MonoBehaviour
 
     void Movement()
     {
-        if (gameObject.CompareTag("Big") && SceneManager.GetActiveScene().name != "MainMenu" && !switcher.smallSelected)
+        if (gameObject.CompareTag("Big") && SceneManager.GetActiveScene().name != "Main Menu" && !switcher.smallSelected)
         {
             horiz = Input.GetAxisRaw("Horizontal");
             vert = Input.GetAxisRaw("Vertical");
@@ -65,7 +74,7 @@ public class PlayerController : MonoBehaviour
             }
         }
 
-        else if (gameObject.CompareTag("Small") && SceneManager.GetActiveScene().name != "MainMenu" && switcher.smallSelected)
+        else if (gameObject.CompareTag("Small") && SceneManager.GetActiveScene().name != "Main Menu" && switcher.smallSelected)
         {
             horiz = Input.GetAxisRaw("Horizontal");
             vert = Input.GetAxisRaw("Vertical");
@@ -86,7 +95,7 @@ public class PlayerController : MonoBehaviour
 
     IEnumerator Jump()
     {
-        if (Input.GetKeyDown(KeyCode.Space) && isGrounded && !delayFix)
+        if (Input.GetKeyDown(KeyCode.Space) && isGrounded && !delayFix && SceneManager.GetActiveScene().name != "Main Menu")
         {
             if (gameObject.CompareTag("Big") && !switcher.smallSelected)
             {
@@ -133,7 +142,7 @@ public class PlayerController : MonoBehaviour
 
     void GroundCheck()
     {
-        if (Physics.Raycast(transform.position, Vector3.down, rayDistance, groundLayer))
+        if (Physics.Raycast(transform.position, Vector3.down, rayDistance, groundLayer) && !delayFix)
         {
             Debug.DrawRay(transform.position, Vector3.down  * rayDistance, Color.green);
 
@@ -157,7 +166,6 @@ public class PlayerController : MonoBehaviour
     {
         if (other.gameObject.CompareTag("Lava"))
         {
-            //SceneManager.LoadScene(SceneManager.GetActiveScene().name);
             StartCoroutine(Transition(SceneManager.GetActiveScene().name, Color.red));
         }
     }
