@@ -8,6 +8,8 @@ TagManager:
   - Small
   - Big
   - Crate
+  - Lava
+  - Pickup
   layers:
   - Default
   - TransparentFX

@@ -161,7 +161,7 @@ public class Throwing : MonoBehaviour
 
     private void OnTriggerStay(Collider other)
     {
-        if (other.gameObject.CompareTag("Small") && !switcher.smallSelected && !playerScript.holdingSmall)
+        if (other.gameObject.CompareTag("Pickup") && !switcher.smallSelected && !playerScript.holdingSmall)
         {
             other.gameObject.GetComponentInParent<Outline>().enabled = true;
             canPickup = true;
@@ -170,7 +170,7 @@ public class Throwing : MonoBehaviour
             pickupText.GetComponent<Animator>().SetBool("active", true);
         }
 
-        else if (other.gameObject.CompareTag("Small"))
+        else if (other.gameObject.CompareTag("Pickup"))
         {
             other.gameObject.GetComponentInParent<Outline>().enabled = false;
             canPickup = false;
@@ -181,7 +181,7 @@ public class Throwing : MonoBehaviour
 
     private void OnTriggerExit(Collider other)
     {
-        if (other.gameObject.CompareTag("Small"))
+        if (other.gameObject.CompareTag("Pickup"))
         {
             other.gameObject.GetComponentInParent<Outline>().enabled = false;
             canPickup = false;

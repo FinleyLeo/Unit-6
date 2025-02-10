@@ -28,17 +28,15 @@ public class SwitchCharacter : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Tab))
+        if (Input.GetKeyDown(KeyCode.Tab) && !big.GetComponent<Throwing>().isAiming && !bigScript.holdingSmall)
         {
             smallSelected = !smallSelected;
 
-            if (smallSelected && bigScript.isGrounded && !bigScript.delayFix && !bigScript.holdingSmall)
+            if (smallSelected && bigScript.isGrounded && !bigScript.delayFix)
             {
                 cineCam.Follow = small.transform;
                 cineCam.Lens.FieldOfView = 60;
                 camRotation.TargetOffset = new Vector3(0, 1, 0);
-
-                bigAnim.SetFloat("Speed", 0);
             }
 
             else if (!smallSelected && smallScript.isGrounded && !smallScript.delayFix)
@@ -46,9 +44,17 @@ public class SwitchCharacter : MonoBehaviour
                 cineCam.Follow = big.transform;
                 cineCam.Lens.FieldOfView = 60;
                 camRotation.TargetOffset = new Vector3(0, 2.5f, 0);
-
-                smallAnim.SetFloat("Speed", 0);
             }
+        }
+
+        if (smallSelected)
+        {
+            bigAnim.SetFloat("Speed", 0);
+        }
+
+        else
+        {
+            smallAnim.SetFloat("Speed", 0);
         }
     }
 }

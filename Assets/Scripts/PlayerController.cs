@@ -1,5 +1,7 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class PlayerController : MonoBehaviour
 {
@@ -12,6 +14,8 @@ public class PlayerController : MonoBehaviour
     public LayerMask groundLayer;
 
     public Vector3 dir, movedir;
+
+    public GameObject transition;
 
     Rigidbody rb;
     Animator anim;
@@ -40,7 +44,7 @@ public class PlayerController : MonoBehaviour
 
     void Movement()
     {
-        if (gameObject.CompareTag("Big") && !switcher.smallSelected)
+        if (gameObject.CompareTag("Big") && SceneManager.GetActiveScene().name != "MainMenu" && !switcher.smallSelected)
         {
             horiz = Input.GetAxisRaw("Horizontal");
             vert = Input.GetAxisRaw("Vertical");
@@ -61,7 +65,7 @@ public class PlayerController : MonoBehaviour
             }
         }
 
-        else if (gameObject.CompareTag("Small") && switcher.smallSelected)
+        else if (gameObject.CompareTag("Small") && SceneManager.GetActiveScene().name != "MainMenu" && switcher.smallSelected)
         {
             horiz = Input.GetAxisRaw("Horizontal");
             vert = Input.GetAxisRaw("Vertical");
@@ -149,5 +153,21 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.CompareTag("Lava"))
+        {
+            //SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+            StartCoroutine(Transition(SceneManager.GetActiveScene().name, Color.red));
+        }
+    }
+
+    IEnumerator Transition(string sceneName, Color color)
+    {
+        transition.GetComponent<Image>().color = color;
+        transition.GetComponent<Animator>().SetTrigger("Fade");
+        yield return new WaitForSeconds(0.5f);
+        SceneManager.LoadScene(sceneName);
+    }
+
 }
