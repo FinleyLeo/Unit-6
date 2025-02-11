@@ -11,6 +11,8 @@ public class Door : MonoBehaviour
 
     int amount;
 
+    public bool canEnter;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -44,6 +46,7 @@ public class Door : MonoBehaviour
             {
                 text.SetActive(true);
                 text.GetComponent<Animator>().SetBool("active", true);
+                canEnter = true;
             }
         }
     }
@@ -56,6 +59,7 @@ public class Door : MonoBehaviour
             doorText.text = amount + "/2";
 
             text.GetComponent<Animator>().SetBool("active", false);
+            canEnter = false;
         }
     }
 
