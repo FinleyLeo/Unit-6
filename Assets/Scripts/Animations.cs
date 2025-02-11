@@ -21,8 +21,17 @@ public class Animations : MonoBehaviour
     void AnimationLogic()
     {
         anim.SetFloat("Speed", Mathf.Abs(controller.dir.magnitude));
-        anim.SetFloat("YVel", rb.linearVelocity.y);
         anim.SetBool("Grounded", controller.isGrounded);
+
+        if (rb.linearVelocity.y < -0.1f && !controller.isGrounded)
+        {
+            anim.SetBool("Falling", true);
+        }
+
+        else
+        {
+            anim.SetBool("Falling", false);
+        }
 
         if (gameObject.CompareTag("Big"))
         {

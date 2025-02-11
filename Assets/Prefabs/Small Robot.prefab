@@ -41,6 +41,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8687276092704624958}
   - component: {fileID: 8158631613250374573}
+  - component: {fileID: 4198793937781671525}
   - component: {fileID: 6539196833098035287}
   - component: {fileID: 1939112775970107096}
   - component: {fileID: 1919163428891316147}
@@ -93,6 +94,29 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!136 &4198793937781671525
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 434189817312531424}
+  m_Material: {fileID: 13400000, guid: 2b83b70902092cc4791f1d283f89a8e3, type: 2}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 1.2
+  m_Height: 3.5856562
+  m_Direction: 1
+  m_Center: {x: -0.029044867, y: 2.2271543, z: 0.011217117}
 --- !u!136 &6539196833098035287
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -112,10 +136,10 @@ CapsuleCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.96878165
-  m_Height: 4.1556454
+  m_Radius: 1
+  m_Height: 2.0811343
   m_Direction: 1
-  m_Center: {x: -0.0070856214, y: 1.9421597, z: 0}
+  m_Center: {x: -0.029044867, y: 0.9021585, z: 0.011217117}
 --- !u!54 &1939112775970107096
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -155,9 +179,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aa8c86bf0c45b0142b6de7092e5b5c28, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 8
-  jumpHeight: 5
-  rayDistance: 0.05
+  speed: 9
+  jumpHeight: 6
+  rayDistance: 0.3
   horiz: 0
   vert: 0
   isGrounded: 0
@@ -168,6 +192,7 @@ MonoBehaviour:
     m_Bits: 64
   dir: {x: 0, y: 0, z: 0}
   movedir: {x: 0, y: 0, z: 0}
+  transition: {fileID: 0}
   switcher: {fileID: 0}
 --- !u!114 &9173057652295923288
 MonoBehaviour:
@@ -188,7 +213,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 434189817312531424}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5fea29bb7c508c244a1f805a5fd3fc4d, type: 3}
   m_Name: 
@@ -274,7 +299,7 @@ GameObject:
   - component: {fileID: 9074624145829180318}
   m_Layer: 0
   m_Name: PickupArea
-  m_TagString: Small
+  m_TagString: Pickup
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -951,7 +976,7 @@ Transform:
   m_GameObject: {fileID: 8160522381319013173}
   serializedVersion: 2
   m_LocalRotation: {x: -0.7071068, y: 0, z: -0, w: 0.7071067}
-  m_LocalPosition: {x: -0.0000004979584, y: 0, z: 0}
+  m_LocalPosition: {x: 8.028243, y: 0, z: 0}
   m_LocalScale: {x: 100, y: 100, z: 100}
   m_ConstrainProportionsScale: 0
   m_Children: []
